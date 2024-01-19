@@ -7,7 +7,7 @@ room_dict = {
     "corridor_1": [("east"),("You enter a dark corridor, the first of many perhaps."),"","corridor_2","",""],
     "corridor_2": [("east", "south"), ("You have a choice: to your east lies a gigantic set of doors, to your south is a smaller much more inviting door."),"","boss_room","blessed_room",""],
     "blessed_room": [("north"), ("You receive the blessings of the abyss, perhaps this will help you in your final moments."),"corridor_2","","",""],
-    "boss_room": [(""), ("You enter the final room. Before you lies a sleeping dragon.")],
+    "boss_room": [(""), ("You enter the final room. Before you lies a sleeping dragon."), 0],
 }
 current_location = "start"
 blessing = 0
@@ -33,7 +33,9 @@ def move(current_location):
             elif moving == "south":
                 current_location = room_dict[current_location][4] 
                 narrative(current_location)
-                fight(current_location)         
+                fight(current_location)
+                if current_location == "blessed_room":
+                    room_dict["boss_room"][2] = 1       
                 options(current_location)
                  
                
@@ -68,11 +70,11 @@ def fight(current_location):
     elif current_location == "boss_room":
         print("You approach the sleeping dragon. What would you like to do?")
         fight_choice = input("You can fight (f), run (r), or cry (c).").lower()
-        if blessing == 0:
+        if room_dict["boss_room"][2] == 0:
             print("The dragon awakens and obliterates you. Take the hint next time.") 
             sys.exit(0)
         elif fight_choice == "f":
-            print("The dragon awakens but due to your blessing, after an arduous battle you arise victorious")
+            print("The dragon awakens but due to your blessing, after an arduous battle you arise victorious.")
             print("Well done, you have completed The Abyss.")
             sys.exit(0)
         elif fight_choice == "r":
@@ -81,6 +83,8 @@ def fight(current_location):
         elif fight_choice == "c":
             print("Well that was unhelpful. You are killed.")
             sys.exit(0)
+    else:
+        print("You have entered incorrectly.")
 
 def options(current_location):
     loop = True
