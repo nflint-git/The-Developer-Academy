@@ -1,4 +1,5 @@
-import sys
+import sys #used to end the programme at certain times
+#dictionary stores all the information related to the rooms, which are the listed keys
 room_dict = {
     "start": ["south","","","","goblins_lair",""],
     "goblins_lair": [("east", "south", "west"), "You have entered the lair of the goblins. There you find a fat and grotesquely hairy goblin.","", "death_room","corridor_1","treasure_room"],
@@ -9,17 +10,17 @@ room_dict = {
     "blessed_room": [("north"), ("You receive the blessings of the abyss, perhaps this will help you in your final moments."),"corridor_2","","",""],
     "boss_room": [(""), ("You enter the final room. Before you lies a sleeping dragon."), 0],
 }
-current_location = "start"
-blessing = 0
-def move(current_location):
+current_location = "start" #important variable to store and track location
+blessing = 0 #used as an indicator for the entry to the blessed room that allows the boss to be defeated
+def move(current_location): #used to move and update the location, draws info from the dictionary
     while True:    
         print("""\n
             Which way would you like to go? You can go North, South, East, or West depending on the room you are in.""")
         print("""\n
             You are currently located in room: """ + str(current_location))
         moving = input("""\n
-            You can move: """ + str(room_dict[current_location][0]) + ". Please input your movement: ").lower()
-        verify = room_dict[current_location][0]
+            You can move: """ + str(room_dict[current_location][0]) + ". Please input your movement: ").lower() #filters out the directions the user can move 
+        verify = room_dict[current_location][0] #verify the user had entered an acceptable input 
         if moving in verify:            
             if moving == "north":
                 current_location = room_dict[current_location][2]
@@ -30,7 +31,7 @@ def move(current_location):
             elif moving == "east":
                 current_location = room_dict[current_location][3]
                 narrative(current_location)
-                if current_location == "death_room":
+                if current_location == "death_room": #ends the game if they enter the "death_room"
                     sys.exit(0)                 
                 fight(current_location)                        
                 options(current_location)
@@ -40,7 +41,7 @@ def move(current_location):
                 current_location = room_dict[current_location][4] 
                 narrative(current_location)
                 fight(current_location)
-                if current_location == "blessed_room":
+                if current_location == "blessed_room": #"modifys the dictionary to say they have entered the blessed room"
                     room_dict["boss_room"][2] = 1       
                 options(current_location)
                 
@@ -57,11 +58,11 @@ def move(current_location):
             --- You have entered incorrectly, please enter North, South, East, or West, respectively.""")
             continue                      
 
-def narrative(current_location):
+def narrative(current_location): #prints the index 1 which stores the game narration
     print(f"\nYou have entered {current_location}")
     print(room_dict[current_location][1])
 
-def fight(current_location):
+def fight(current_location): #allows for a potential fight conditional on the room
     while True:
         if current_location == "goblins_lair":
             print("\nThe hefty goblin approaches. What would you like to do?")
@@ -101,7 +102,7 @@ def fight(current_location):
         else:
             break
         
-def options(current_location):
+def options(current_location): #gives the user 3 choices to move, get a hint or quit, which works in all tested instances - allowing for incorrect inputs to be reattempted 
     loop = True
     while loop == True:
         choices = str(input("""\n
@@ -125,7 +126,7 @@ def options(current_location):
             break
         break
         
-def start_game():
+def start_game(): #a function to start the game, ask the user if they want to play
     play = input("\nWould you like to play The Abyss - text-based dungeon adventure game? (Y/N)").lower()
     if play == "y":
         print("\n Welcome to the Abyss!")
